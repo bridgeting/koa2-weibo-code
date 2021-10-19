@@ -1,3 +1,7 @@
+/**
+ * @description 环境变量
+ */
+
 const ENV = process.NODE_ENV
 
 module.exports = {
