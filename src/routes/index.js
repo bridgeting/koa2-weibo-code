@@ -1,6 +1,7 @@
 const router = require('koa-router')()
+const { loginRedirect, loginCheck } = require('../middlewares/loginChecks')
 
-router.get('/', async (ctx, next) => {
+router.get('/', loginRedirect, async (ctx, next) => {
     // console.log('before debugger')
     // debugger
     // console.log('after debugger')
@@ -14,7 +15,7 @@ router.get('/string', async (ctx, next) => {
     ctx.body = 'koa2 string'
 })
 
-router.get('/json', async (ctx, next) => {
+router.get('/json', loginCheck, async (ctx, next) => {
     ctx.body = {
         title: 'koa2 json'
     }
