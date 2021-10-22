@@ -40,7 +40,7 @@ app.use(views(__dirname + '/views', {
 // session config
 app.keys = [SESSION_SECRET_KEY]
 app.use(session({
-    key: 'weibo.sid', // 默认是‘koa.sid’
+    key: 'weibo.sid', // cookie的key 默认是‘koa.sid’
     prefix: 'weibo:sess:', // reids key的前缀 默认是koa:sess:
     cookie: {
         path: '/',

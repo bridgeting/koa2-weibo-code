@@ -12,7 +12,8 @@ const {
 const { 
     registerUserNameNotExistInfo,
     registerUserNameExistInfo,
-    registerFailInfo
+    registerFailInfo,
+    loginFailInfo
 } = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const doCrypto = require('../utils/cryp')
@@ -33,7 +34,7 @@ async function isExist(userName) {
 
 
 /**
- * 参数>3 使用结构
+ * 参数>3 使用结构来获取数据
  * @param {string} userName
  * @param {string} password
  * @param {number} gender 1-male 2-female 3-secret
@@ -57,7 +58,27 @@ async function register({ userName, password, gender}) {
     }
 }
 
+/**
+ * 
+ * @param {Object} ctx 
+ * @param {string} userName 
+ * @param {string} password 
+ */
+async function login(ctx, userName, password) {
+    // need ctx to set user session info
+    const userInfo = await getUserInfo(userName, doCrypto(password))
+    if (!userInfo) {
+        return new ErrorModel(loginFailInfo)
+    }
+    if (ctx.session.userInfo ==  null) {
+        ctx.session.userInfo = userInfo
+    }
+
+    return new SuccessModel()
+}
+
 module.exports = {
     isExist,
-    register
+    register,
+    login
 }
