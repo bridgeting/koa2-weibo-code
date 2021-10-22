@@ -5,11 +5,18 @@
  * 统一返回格式 
  */
 
-const { getUserInfo } = require('../service/user')
-const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { 
-    registerUserNameNotExistInfo 
+    getUserInfo,
+    createUser
+} = require('../service/user')
+const { 
+    registerUserNameNotExistInfo,
+    registerUserNameExistInfo,
+    registerFailInfo
 } = require('../model/ErrorInfo')
+const { SuccessModel, ErrorModel } = require('../model/ResModel')
+const doCrypto = require('../utils/cryp')
+
 
 /**
  * 
@@ -24,6 +31,33 @@ async function isExist(userName) {
     }
 }
 
+
+/**
+ * 参数>3 使用结构
+ * @param {string} userName
+ * @param {string} password
+ * @param {number} gender 1-male 2-female 3-secret
+ */
+async function register({ userName, password, gender}) {
+    const userInfo = await getUserInfo(userName)
+    if (userInfo) {
+        return new ErrorModel(registerUserNameExistInfo)
+    }
+    
+    try {
+        await createUser({
+            userName, 
+            password: doCrypto(password), 
+            gender
+        })
+        return new SuccessModel()
+    } catch(ex) {
+        console.error(ex.message, ex.stack)
+        return new ErrorModel(registerFailInfo)
+    }
+}
+
 module.exports = {
-    isExist
+    isExist,
+    register
 }
