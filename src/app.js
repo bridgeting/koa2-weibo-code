@@ -69,7 +69,7 @@ app.use(user.routes(), user.allowedMethods())
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
 
 
-// 404
+// 404 & error
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling

@@ -2,9 +2,9 @@
  * @description user view route
  */
 
-const { getUserInfo } = require('../../service/user')
-
 const router = require('koa-router')()
+const { loginRedirect } = require('../../middlewares/loginChecks')
+
 
 /**
  * get userInfo from redis session userInfo
@@ -30,6 +30,10 @@ router.get('/login', async (ctx, next) => {
 
 router.get('/register', async (ctx, next) => {
     await ctx.render('register', getLoginInfo(ctx))
+})
+
+router.get('/setting', loginRedirect, async (ctx, next) => {
+    await ctx.render('setting', ctx.session.userInfo)
 })
 
 module.exports = router

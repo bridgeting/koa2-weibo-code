@@ -37,6 +37,8 @@ const User = seq.define('user', {
         type: STRING,
         comment: 'city'
     }
+}, {
+    timestamps: false
 })
 
 module.exports = User

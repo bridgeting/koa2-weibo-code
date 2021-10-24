@@ -34,6 +34,8 @@ async function getUserInfo(userName, password) {
     return formatRes
 }
 
+
+
 /**
  * 
  * @param {string} userName

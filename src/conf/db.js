@@ -28,7 +28,7 @@ if (isProd) {
         user: 'root',
         password: '89912131',
         port: '3306',
-        database: 'myblog'
+        database: 'koa2_weibo_db'
     }
 }
 
@@ -43,7 +43,7 @@ if (isDev) {
         user: 'root',
         password: '89912131',
         port: '3306',
-        database: 'myblog'
+        database: 'koa2_weibo_db'
     }
 }
 
