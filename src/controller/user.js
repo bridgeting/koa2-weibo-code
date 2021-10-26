@@ -5,17 +5,19 @@
  * 统一返回格式 
  */
 
-const { 
+const {
     getUserInfo,
     createUser,
-    deleteUser
+    deleteUser,
+    updateUser
 } = require('../service/user')
-const { 
+const {
     registerUserNameNotExistInfo,
     registerUserNameExistInfo,
     registerFailInfo,
     loginFailInfo,
-    deleteUserFailInfo
+    deleteUserFailInfo,
+    changeInfoFailInfo
 } = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const doCrypto = require('../utils/cryp')
@@ -41,20 +43,20 @@ async function isExist(userName) {
  * @param {string} password
  * @param {number} gender 1-male 2-female 3-secret
  */
-async function register({ userName, password, gender}) {
+async function register({ userName, password, gender }) {
     const userInfo = await getUserInfo(userName)
     if (userInfo) {
         return new ErrorModel(registerUserNameExistInfo)
     }
-    
+
     try {
         await createUser({
-            userName, 
-            password: doCrypto(password), 
+            userName,
+            password: doCrypto(password),
             gender
         })
         return new SuccessModel()
-    } catch(ex) {
+    } catch (ex) {
         console.error(ex.message, ex.stack)
         return new ErrorModel(registerFailInfo)
     }
@@ -72,7 +74,7 @@ async function login(ctx, userName, password) {
     if (!userInfo) {
         return new ErrorModel(loginFailInfo)
     }
-    if (ctx.session.userInfo ==  null) {
+    if (ctx.session.userInfo == null) {
         ctx.session.userInfo = userInfo
     }
 
@@ -85,7 +87,7 @@ async function login(ctx, userName, password) {
  */
 async function deleteCurUser(userName) {
     const result = await deleteUser(userName)
-    
+
     if (result) {
         return new SuccessModel()
     } else {
@@ -93,9 +95,40 @@ async function deleteCurUser(userName) {
     }
 }
 
+/**
+ * 
+ * @param {Object} ctx 需要ctx的原因是个人信息更新后， session信息也需要同步更新
+ * @param {Object} nickName, city, picture
+ */
+async function changeInfo(ctx, { nickName, city, picture }) {
+    const { userName } = ctx.session.userInfo
+    if (!nickName) {
+        nickName = userName
+    }
+    const result = await updateUser(
+        {
+            newNickName: nickName,
+            newCity: city,
+            newPicture: picture
+        },
+        { userName }
+    )
+    if (result) {
+        Object.assign(ctx.session.userInfo, {
+            nickName,
+            city,
+            picture
+        })
+        return new SuccessModel()
+    }
+    return new ErrorModel(changeInfoFailInfo)
+
+}
+
 module.exports = {
     isExist,
     register,
     login,
-    deleteCurUser
+    deleteCurUser,
+    changeInfo
 }
