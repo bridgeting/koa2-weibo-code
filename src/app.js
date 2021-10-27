@@ -10,14 +10,13 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const koaStatic = require('koa-static')
 
-// const index = require('./routes/index')
+//router
 const userViewRouter =  require('./routes/view/user')
 const blogViewRouter = require('./routes/view/blog')
-
+const errorViewRouter = require('./routes/view/error')
 const userAPIRouter = require('./routes/api/user')
 const homeAPIRouter = require('./routes/api/blog-home')
 const utilsAPIRouter = require('./routes/api/utils')
-const errorViewRouter = require('./routes/view/error')
 
 const { isProd } = require('./utils/env')
 const { REDIS_CONF } = require('./conf/db')
@@ -30,6 +29,7 @@ if (isProd) {
 }
 onerror(app, onerrorConf)
 
+
 // middlewares
 app.use(bodyparser({
     enableTypes: ['json', 'form', 'text']
@@ -38,10 +38,10 @@ app.use(json())
 app.use(logger())
 app.use(koaStatic(__dirname + '/public'))
 app.use(koaStatic(path.join(__dirname, '..', 'uploadFiles')))
-
 app.use(views(__dirname + '/views', {
     extension: 'ejs'
 }))
+
 
 // session config
 app.keys = [SESSION_SECRET_KEY]
@@ -68,18 +68,16 @@ app.use(session({
 //   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 // })
 
+
 // routes
-// app.use(index.routes(), index.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
-
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
 app.use(homeAPIRouter.routes(), homeAPIRouter.allowedMethods())
 app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
-
-
 // 404 & error
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {
