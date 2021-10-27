@@ -13,7 +13,9 @@ const koaStatic = require('koa-static')
 // const index = require('./routes/index')
 const userViewRouter =  require('./routes/view/user')
 const blogViewRouter = require('./routes/view/blog')
+
 const userAPIRouter = require('./routes/api/user')
+const homeAPIRouter = require('./routes/api/blog-home')
 const utilsAPIRouter = require('./routes/api/utils')
 const errorViewRouter = require('./routes/view/error')
 
@@ -70,7 +72,9 @@ app.use(session({
 // app.use(index.routes(), index.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
+app.use(homeAPIRouter.routes(), homeAPIRouter.allowedMethods())
 app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
 
 
