@@ -65,15 +65,49 @@ test('登陆，应该成功', async () => {
     COOKIE = res.headers['set-cookie'].join(';')
 })
 
+//修改基本信息
+test('修改基本信息, 应该成功', async () => {
+    const res = await server
+        .patch('/api/user/changeInfo')
+        .send({
+            nickName: 'testNickName',
+            city: 'testCity',
+            picture: '/test.png'
+        }).set('cookie', COOKIE)
+
+    expect(res.body.errno).toBe(0)
+})
+
+//修改密码
+test('修改密码, 应该成功', async () => {
+    const res = await server
+        .patch('/api/user/changePassword')
+        .send({
+            password,
+            newPassowrd: `p_${Date.now()}`
+        }).set('cookie', COOKIE)
+
+    expect(res.body.errno).toBe(0)
+})
+
 //delete
 test('删除，应该成功', async () => {
     const res = await server
         .post('/api/user/delete')
         .set('cookie', COOKIE)
 
-    console.log('delete res ---- ', res.body);
     expect(res.body.errno).toBe(0)
 })
+
+//退出
+test('退出登陆，应该成功', async () => {
+    const res = await server
+        .post('/api/user/logout')
+        .set('cookie', COOKIE)
+
+    expect(res.body.errno).toBe(0)
+})
+
 
 //删除之后再次查询
 test('删除之后再次查询，应该不存在', async () => {
