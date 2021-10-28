@@ -2,10 +2,6 @@
  * @description weibo data model
  */
 
-/**
- * @description user data model
- */
-
 const seq = require('../seq')
 const { STRING, TEXT, INTEGER } = require('../types')
 
