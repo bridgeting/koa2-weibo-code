@@ -36,11 +36,11 @@
             <div class="right-item">
                 <%- include('widgets/user-info', {
                     userInfo: userData.userInfo,
-                    isMe: userData.isMe
+                    isMe: userData.isMe,
+                    amIFollow: userData.amIFollow,
+                    atCount: userData.atCount
                 });%>
             </div>
-            <!-- amIFollowed: userData.amIFollowed,
-            atCount: userData.atCount -->
 
             <%- include('widgets/fans', {
                 count: userData.fansData.count,
