@@ -2,6 +2,7 @@
  * @description weibo service
  */
 
+const { PAGE_SIZE } = require('../conf/constanct')
 const { Blog, User } = require('../db/model/index')
 const { formatUser, formatBlog } = require('./_format')
 
@@ -21,7 +22,7 @@ async function createBlog({userId, content, image}) {
  * 根据用户获取微博列表
  * @param {Object} search conditons suerName, pageIndex = 0, pageSize = 10
  */
-async function getBlogListByUser({userName, pageIndex = 0, pageSize = 5}) {
+async function getBlogListByUser({userName, pageIndex = 0, pageSize = 10}) {
     const userWhereOpts = {}
     if (userName) {
         userWhereOpts.userName = userName

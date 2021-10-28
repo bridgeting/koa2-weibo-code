@@ -14,10 +14,11 @@ const koaStatic = require('koa-static')
 const userViewRouter =  require('./routes/view/user')
 const blogViewRouter = require('./routes/view/blog')
 const errorViewRouter = require('./routes/view/error')
+const utilsAPIRouter = require('./routes/api/utils')
 const userAPIRouter = require('./routes/api/user')
 const homeAPIRouter = require('./routes/api/blog-home')
 const profileAPIRouter = require('./routes/api/blog-profile')
-const utilsAPIRouter = require('./routes/api/utils')
+const squareAPIRouter = require('./routes/api/blog-square')
 
 const { isProd } = require('./utils/env')
 const { REDIS_CONF } = require('./conf/db')
@@ -73,10 +74,11 @@ app.use(session({
 // routes
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
 app.use(homeAPIRouter.routes(), homeAPIRouter.allowedMethods())
 app.use(profileAPIRouter.routes(), profileAPIRouter.allowedMethods())
-app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
+app.use(squareAPIRouter.routes(), squareAPIRouter.allowedMethods())
 // 404 & error
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
