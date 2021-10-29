@@ -12,7 +12,7 @@ const {
     changePassword,
     logout
 } = require('../../controller/user')
-
+const { getFollows } = require('../../controller/user-relation')
 const userValidate = require('../../validator/user')
 const { genValidator } = require('../../middlewares/validator')
 const { isTest } = require('../../utils/env')
@@ -61,10 +61,24 @@ router.patch('/changePassword', loginCheck, genValidator(userValidate), async (c
     ctx.body = await changePassword(userName, password, newPassword)
 })
 
-
-//
+// logout
 router.post('/logout', loginCheck, async (ctx, next) => {
     ctx.body = await logout(ctx)
+})
+
+
+// get@list
+router.get('/getAtList', loginCheck, async (ctx, next) => {
+    const { id: userId } = ctx.session.userInfo
+
+    const result = await getFollows(userId)
+    const { followsList } = result.data
+    const list = followsList.map(user => {
+        // nickName - userName
+        return `${user.nickName} - ${user.userName}`
+    })
+    ctx.body = list
+
 })
 
 module.exports = router
