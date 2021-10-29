@@ -3,9 +3,10 @@
  */
 
 const xss = require('xss')
+const { PAGE_SIZE } = require('../conf/constanct')
 const { createBlogFailInfo } = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { createBlog } = require('../service/blog')
+const { createBlog, getFollowsBlogList } = require('../service/blog')
 
 
 /**
@@ -26,6 +27,24 @@ async function create({userId, content, image}) {
     }
 }
 
+/**
+ * 
+ * @param {*} userId 
+ * @param {*} pageIndex 
+ */
+async function getHomeBlogList(userId, pageIndex = 0) {
+    const result = await getFollowsBlogList({userId, pageIndex, pageSize: PAGE_SIZE})
+    const { count, blogList } = result
+    return new SuccessModel({
+        isEmpty: blogList.length === 0,
+        blogList,
+        pageSize: PAGE_SIZE,
+        pageIndex,
+        count
+    })
+}
+
 module.exports = {
-    create
+    create,
+    getHomeBlogList
 }
