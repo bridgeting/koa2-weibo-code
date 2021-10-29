@@ -52,6 +52,19 @@ test('获取zhangsan关注人，应该有lisi', async () => {
     expect(hasUserName).toBe(true)
 })
 
+// 获取at列表
+test('获取张三at列表，应该有李四', async () => {
+    const res = await server
+        .get('/api/user/getAtList')
+        .set('cookie', Z_COOKIE)
+
+    const atList = res.body
+    const hasUserName = atList.some(item => {
+        return item.indexOf(` - ${L_USER_NAME}`) > 0
+    })
+    expect(hasUserName).toBe(true)
+})
+
 test('z取消关注l, 应该成功', async () => {
     const res = await server
         .post('/api/profile/unFollow')
