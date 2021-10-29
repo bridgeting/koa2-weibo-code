@@ -19,6 +19,7 @@ const userAPIRouter = require('./routes/api/user')
 const homeAPIRouter = require('./routes/api/blog-home')
 const profileAPIRouter = require('./routes/api/blog-profile')
 const squareAPIRouter = require('./routes/api/blog-square')
+const atMeAPIRouter = require('./routes/api/blog-at')
 
 const { isProd } = require('./utils/env')
 const { REDIS_CONF } = require('./conf/db')
@@ -79,6 +80,7 @@ app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
 app.use(homeAPIRouter.routes(), homeAPIRouter.allowedMethods())
 app.use(profileAPIRouter.routes(), profileAPIRouter.allowedMethods())
 app.use(squareAPIRouter.routes(), squareAPIRouter.allowedMethods())
+app.use(atMeAPIRouter.routes(), atMeAPIRouter.allowedMethods())
 // 404 & error
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
