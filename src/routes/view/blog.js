@@ -9,6 +9,7 @@ const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
 const { getFans, getFollows } = require('../../controller/user-relation')
 const { getHomeBlogList } = require('../../controller/blog-home')
+const { atMeCount } = require('../../controller/blog-at')
 
 // index page
 router.get('/', loginRedirect, async (ctx, next) => {
@@ -26,9 +27,15 @@ router.get('/', loginRedirect, async (ctx, next) => {
     const followsResult = await getFollows(userId)
     const { count: followsCount, followsList } = followsResult.data
 
+    // 获取@
+    const countResult = await atMeCount(userId)
+    const { count: atCount } = countResult.data
+
+
     await ctx.render('index', {
         userData: {
             userInfo: userInfo,
+            atCount,
             fansData: {
                 count: fansCount,
                 list: fansList
@@ -80,6 +87,10 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
     const followsResult = await getFollows(curUserInfo.id)
     const { count: followsCount, followsList } = followsResult.data
 
+    // 获取@
+    const countResult = await atMeCount(myUserInfo.id)
+    const { count: atCount } = countResult.data
+
     //我是否关注此人
     const amIFollow = fansList.some(item => {
         return item.userName === myUserName
@@ -97,6 +108,7 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
             userInfo: curUserInfo,
             isMe,
             amIFollow,
+            atCount,
             fansData: {
                 count: fansCount,
                 list: fansList
