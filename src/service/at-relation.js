@@ -47,7 +47,7 @@ async function getAtUserBlogList({ userId, pageIndex, pageSize = 10 }) {
                 attributes: ['userId', 'blogId'],
                 where: {
                     userId
-                }  
+                }
             },
             {
                 model: User,
@@ -70,8 +70,39 @@ async function getAtUserBlogList({ userId, pageIndex, pageSize = 10 }) {
 
 }
 
+
+/**
+ * update atrelation
+ * @param {Object} update
+ * @param {Object} search condition: userId, isRead
+ */
+async function updateAtRelation(
+    { newIsRead },
+    { userId, isRead }
+) {
+    const updateData = {}
+    if (newIsRead) {
+        updateData.isRead = newIsRead
+    }
+
+    const whereData = {}
+    if (userId) {
+        whereData.userId = userId
+    }
+    if (isRead) {
+        whereData.isRead = isRead
+    }
+
+    const result = AtRelation.update(updateData, {
+        where: whereData
+    })
+
+    return result[0] > 0
+}
+
 module.exports = {
     createAtRelation,
     getAtRelationCount,
-    getAtUserBlogList
+    getAtUserBlogList,
+    updateAtRelation
 }
